@@ -66,6 +66,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/trajet/edit/{id}', [TrajetController::class, 'create']);
     Route::get('/passager/{id}', [Controller::class, 'destroypassager']);
     Route::get('/chauffeur/{id}', [Controller::class, 'destroychauffeur']);
+    Route::get('/listeCommande', [CommandeController::class, 'commandespassager'])->name('listeCommande');
 });
 
 Route::middleware(['auth', 'role:passager'])->group(function () {

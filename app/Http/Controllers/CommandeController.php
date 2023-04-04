@@ -19,4 +19,9 @@ class CommandeController extends Controller
     {
         return view('homechauffeur', ['commandes' => Commande::with('passager', 'trajet')->get()]);
     }
+
+    public function commandespassager()
+    {
+        return view('adminCommande', ['commandes' => Commande::with('chauffeur','passager', 'trajet')->get()]);
+    }
 }

@@ -114,79 +114,97 @@
                 </nav>
             </div>
         </div>
+        <!-- Navbar End -->
+
         <div class="container">
             <br>
             <p class="h3">Bienvenue <span style="color:#F77D0A;">{{ Auth::user()->prenom }} {{ Auth::user()->name }}</span></p>
             <br>
-            <div class="row">
-                <div class="col-md-6 text-center"><a href="/trajet" class="btn" style="background-color:#F77D0A; color:#fff">Voir la liste des trajets</a>
+            <p class="text-center h2">commandes en attente</p>
+                <br>
+                <div class="">
+                    <table class="table">
+                        <thead style="background-color: #2B2E4A;">
+                        <tr style="color:#F77D0A;">
+                            <th scope="col">Depart</th>
+                            <th scope="col">Destination</th>
+                            <th scope="col">Prix</th>
+                            <th scope="col" class="text-center">Chauffeur</th>
+                            <th scope="col" class="text-center">Client</th>
+                            <th scope="col" class="text-center">Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($commandes as $commande)
+                            @if($commande->chauffeur_id == null)
+                        <tr style="color: #2B2E4A;">
+                            <td>{{ $commande->trajet->depart }}</td>
+                            <td>{{ $commande->trajet->destination }}</td>
+                            <td>{{ $commande->trajet->prix }}</td>
+                            <td class="text-center">aucun chauffeur</td>
+                            <td class="text-center">{{ $commande->passager->name }} | {{ $commande->passager->telephone }}</td>
+                            <td class="text-center"><form action="" method="post" action="/commandes">
+                                <input  name="passager_id" value="{{ Auth::user()->id }}" hidden>
+                                <button type="submit" style="background-color:#F77D0A; color:white;">Prendre la commade</button>
+                            </form></td>
+                        </tr>
+                        @endif
+                        @endforeach
+                        </tbody>
+                    </table>
                 </div>
-                <div class="col-md-6 text-center"><a href="/chauffeur" class="btn" style="background-color:#F77D0A; color:#fff">Voir la liste des chauffeurs</a>
-                </div>
-            </div>
-            <br>
-            <div class="row">
-                <div class="col-md-6 text-center"><a href="/passager" class="btn" style="background-color:#F77D0A; color:#fff">Voir la liste des passagers</a>
-                </div>
-                <div class="col-md-6 text-center"><a href="/listeCommande" class="btn" style="background-color:#F77D0A; color:#fff">Voir la liste des commandes</a>
-                </div>
-            </div>
-            <!-- Outer Row -->
-            <div class="row justify-content-center">
-
-                <div class="col-xl-10 col-lg-12 col-md-9">
-
-                    <div class="card o-hidden border-0 shadow-lg my-5">
-                        <div class="card-body p-0">
-                            <!-- Nested Row within Card Body -->
-                            <div class="row">
-                                <div class="col-lg-6 d-none d-lg-block bg-trajet-image" style="background:url(/img/pexels-cottonbro-studio-5967048.jpg); background-position:center; background-size:cover"></div>
-                                <div class="col-lg-6">
-                                    <div class="p-5">
-                                        <div class="text-center">
-                                            <h1 class="h4 text-gray-900 mb-4" style="font-weight: 600;">Ajoutez un trajet</h1>
-                                        </div>
-                                        <form class="user" method="POST" action="/trajets">
-                                            @csrf
-                                            <div class="form-group">
-                                                <input id="depart" type="text" name="depart" :value="old('depart')" required autofocus autocomplete="depart" class="form-control form-control-user" placeholder="Entrer une adresse de depart..." style="border-radius:20px;">
-                                                <x-input-error :messages="$errors->get('depart')" class="mt-2" />
-                                            </div>
-                                            <div class="form-group">
-                                                <input id="destination" type="text" name="destination" :value="old('destination')" required autofocus autocomplete="destination" class="form-control form-control-user" placeholder="Entrer une adresse de destination..."style="border-radius:20px;">
-                                                <x-input-error :messages="$errors->get('destination')" class="mt-2" />
-                                            </div>
-                                            <div class="form-group">
-                                                <input id="prix" type="number" name="prix" :value="old('prix')" required autofocus autocomplete="prix" class="form-control form-control-user" placeholder="Entrer votre adresse prix..."style="border-radius:20px;">
-                                                <x-input-error :messages="$errors->get('prix')" class="mt-2" />
-                                            </div>
-                                            <button type="submit" class="btn btn-primary btn-user btn-block" style =" background-color:#F77D0A; border:#F77D0A; font-weight: 600; border-radius:20px;">Ajouter</button>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <br>
+                <br>
+            <p class="text-center h2">commandes receptionnées</p>
+                <br>
+                <div class="">
+                    <table class="table">
+                        <thead style="background-color: #2B2E4A;">
+                        <tr style="color:#F77D0A;">
+                            <th scope="col">Depart</th>
+                            <th scope="col">Destination</th>
+                            <th scope="col">Prix</th>
+                            <th scope="col" class="text-center">Chauffeur</th>
+                            <th scope="col" class="text-center">Client</th>
+                            <th scope="col" class="text-center">Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($commandes as $commande)
+                            @if($commande->chauffeur_id != null)
+                        <tr style="color: #2B2E4A;">
+                            <td>{{ $commande->trajet->depart }}</td>
+                            <td>{{ $commande->trajet->destination }}</td>
+                            <td>{{ $commande->trajet->prix }}</td>
+                            <td class="text-center">{{ $commande->chauffeur->name }} | {{ $commande->chauffeur->telephone }}</td>
+                            <td class="text-center">{{ $commande->passager->name }} | {{ $commande->passager->telephone }}</td>
+                            <td class="text-center"><form action="" method="post" action="/commandes">
+                                <input  name="passager_id" value="{{ Auth::user()->id }}" hidden>
+                                <button type="submit" style="background-color:#F77D0A; color:white;">Prendre la commade</button>
+                            </form></td>
+                        </tr>
+                        @endif
+                        @endforeach
+                        </tbody>
+                    </table>
                 </div>
 
-            </div>
-        </div>
 
-        <!-- Navbar End -->
-    <!-- JavaScript Libraries -->
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
-    <script src="/lib/easing/easing.min.js"></script>
-    <script src="/lib/waypoints/waypoints.min.js"></script>
-    <script src="/lib/owlcarousel/owl.carousel.min.js"></script>
-    <script src="/lib/tempusdominus/js/moment.min.js"></script>
-    <script src="/lib/tempusdominus/js/moment-timezone.min.js"></script>
-    <script src="/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
 
-    <!-- Template Javascript -->
-    <script src="/js/main.js"></script>
-    <script src="/js/bootstrap.min.js"></script>
-    <script src="/js/jquery.easing.min.js"></script>
-    <script src="/js/scrolling-nav.js"></script>
-    <script src="/js/validator.js"></script>
-    <script src="/js/jquery.min.js"></script>
+        <!-- JavaScript Libraries -->
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+        <script src="/lib/easing/easing.min.js"></script>
+        <script src="/lib/waypoints/waypoints.min.js"></script>
+        <script src="/lib/owlcarousel/owl.carousel.min.js"></script>
+        <script src="/lib/tempusdominus/js/moment.min.js"></script>
+        <script src="/lib/tempusdominus/js/moment-timezone.min.js"></script>
+        <script src="/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
+
+        <!-- Template Javascript -->
+        <script src="/js/main.js"></script>
+        <script src="/js/bootstrap.min.js"></script>
+        <script src="/js/jquery.easing.min.js"></script>
+        <script src="/js/scrolling-nav.js"></script>
+        <script src="/js/validator.js"></script>
+        <script src="/js/jquery.min.js"></script>
