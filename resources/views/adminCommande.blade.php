@@ -143,7 +143,7 @@
                             <td>{{ $commande->trajet->prix }}</td>
                             <td class="text-center">aucun chauffeur</td>
                             <td class="text-center">{{ $commande->passager->name }} | {{ $commande->passager->telephone }}</td>
-                            <td class="text-center"><form action="" method="post" action="/commandes">
+                            <td class="text-center"><form action="" method="get" action="/commandes">
                                 <input  name="passager_id" value="{{ Auth::user()->id }}" hidden>
                                 <button type="submit" style="background-color:#F77D0A; color:white;">Prendre la commade</button>
                             </form></td>

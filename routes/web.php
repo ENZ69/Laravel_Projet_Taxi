@@ -73,9 +73,8 @@ Route::middleware(['auth', 'role:passager'])->group(function () {
     Route::get('/accueil-passager', function () {
         return view('homepassager');
     })->middleware(['auth', 'verified'])->name('accueil-passager');
-    Route::get('/accueiluser', [TrajetController::class, 'passagerTrajet']);
-    Route::get('/accueil-passager', [TrajetController::class, 'passagerTrajet'])->name('passagertrajets.index');
     Route::post('/commandes', [CommandeController::class, 'store'])->name('commandes.store');
+    Route::get('/accueil-passager', [CommandeController::class, 'commandespasser'])->name('passagertrajets.index');
 });
 
 Route::middleware(['auth', 'role:chauffeur'])->group(function () {
@@ -83,6 +82,7 @@ Route::middleware(['auth', 'role:chauffeur'])->group(function () {
         return view('homechauffeur');
     })->middleware(['auth', 'verified'])->name('accueil-chauffeur');
     Route::get('/accueil-chauffeur', [CommandeController::class, 'index'])->name('commandeschauffeurs');
+    Route::post('/commandes/{id}', [CommandeController::class, 'update'])->name('commandes.update');
 });
 
 require __DIR__.'/auth.php';

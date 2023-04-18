@@ -38,143 +38,33 @@
         <link rel="stylesheet" href={{ asset('css/styles.css') }}>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     </head>
-    <body class="antialiased">
-        <!-- Topbar Start -->
-        <div class="container-fluid bg-dark py-3 px-lg-5 d-none d-lg-block" >
-            <div class="row">
-                <div class="col-md-6 text-center text-lg-left mb-2 mb-lg-0">
-                    <div class="d-inline-flex align-items-center">
-                        <a class="text-body pr-3" href=""><i class="fa fa-phone-alt mr-2"></i>{{ Auth::user()->telephone }}</a>
-                        <span class="text-body">|</span>
-                        <a class="text-body px-3" href="https://{{ Auth::user()->email}}"><i class="fa fa-envelope mr-2"></i>{{ Auth::user()->email}}</a>
-                    </div>
-                </div>
-                <div class="col-md-6 text-center text-lg-right">
-                    <div class="d-inline-flex align-items-center">
-                        <a class="text-body px-3" href="https://www.facebook.com/profile.php?id=100007521786821&mibextid=LQQJ4d">
-                            <i class="fab fa-facebook-f"></i>
-                        </a>
-                        <a class="text-body px-3" href="https://twitter.com/manudd9/">
-                            <i class="fab fa-twitter"></i>
-                        </a>
-                        <a class="text-body px-3" href="https://instagram.com/cantguardenz?igshid=YmMyMTA2M2Y=">
-                            <i class="fab fa-instagram"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- Topbar End -->
-
-
-        <!-- Navbar Start -->
-        <div class="container-fluid position-relative nav-bar p-0" id="top">
-            <div class="position-relative px-lg-5" style="z-index: 9;">
-                <nav class="navbar navbar-expand-lg bg-secondary navbar-dark py-3 py-lg-0 pl-3 pl-lg-5">
-                    <a href="/" class="navbar-brand">
-                        <h1 class="text-uppercase text-primary mb-1">Taxibokko</h1>
-                    </a>
-                    <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="collapse navbar-collapse justify-content-between px-3" id="navbarCollapse">
-                        <div class="navbar-nav ml-auto py-0">
-                            <a href="/" class="nav-item nav-link">Accueil</a>
-                            <a href="/Apropos" class="nav-item nav-link">A propos</a>
-                            <div class="nav-item dropdown">
-                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Passagers</a>
-                                <div class="dropdown-menu rounded-0 m-0">
-                                    <a href="car.html" class="dropdown-item">Comment ça marche</a>
-                                    <a href="detail.html" class="dropdown-item">Nos prix & engagements</a>
-                                </div>
-                            </div>
-                            <div class="nav-item dropdown">
-                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Chauffeurs</a>
-                                <div class="dropdown-menu rounded-0 m-0">
-                                    <a href="team.html" class="dropdown-item">Comment ça marche</a>
-                                </div>
-                            </div>
-                            <div class="nav-item dropdown">
-                                <a href="/creationCompte" class="nav-link dropdown-toggle active" data-toggle="dropdown"><i class="fa-solid fa-user"></i> {{ Auth::user()->name }}</a>
-                                <div class="dropdown-menu rounded-0 m-0">
-                                    <a href="/profile" class="dropdown-item"><i class="fa-solid fa-user"></i> Profile</a>
-                                    <form method="POST" action="{{ route('logout') }}">
-                                        @csrf
-
-                                        <x-dropdown-link :href="route('logout')"
-                                                onclick="event.preventDefault();
-                                                            this.closest('form').submit();">
-                                           <i class="fa-solid fa-right-from-bracket"></i> {{ __('Log Out') }}
-                                        </x-dropdown-link>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </nav>
-            </div>
-        </div>
-        <!-- Navbar End -->
-
+    <body class="antialiased" style="background-color: #2B2E4A;">
         <div class="container">
             <br>
-            <p class="h3">Bienvenue <span style="color:#F77D0A;">{{ Auth::user()->prenom }} {{ Auth::user()->name }}</span></p>
             <br>
-            @if (session('success'))
-                    <div class="alert alert-success">
-                        {{ session('success') }}
-                    </div>
-                    {{ session()->forget('success') }}
-                @endif
-            <p class="text-center h2">commandes en attente</p>
+                <p class="text-center h2" style="color: #F77D0A;">Commande acceptée! vous serez le chauffeur</p>
                 <br>
-                <div class="">
-                    <table class="table">
-                        <thead style="background-color: #2B2E4A;">
-                        <tr style="color:#F77D0A;">
-                            <th scope="col">Depart</th>
-                            <th scope="col">Destination</th>
-                            <th scope="col">Prix</th>
-                            <th scope="col">Numéro du client</th>
-                            <th scope="col" class="text-center">Action</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($commandes as $commande)
-                            @if($commande->chauffeur_id == null)
-                        <tr style="color: #2B2E4A;">
-                            <td>{{ $commande->trajet->depart }}</td>
-                            <td>{{ $commande->trajet->destination }}</td>
-                            <td>{{ $commande->trajet->prix }}</td>
-                            <td>{{ $commande->passager->telephone }}</td>
-                            <td class="text-center"><form method="post" action="{{ route('commandes.update', $commande->id) }}">
-                                @csrf
-                                <input  name="chauffeur_id" value="{{ Auth::user()->id }}" hidden>
-                                <button type="submit" style="background-color:#F77D0A; color:white;">Prendre la commade</button>
-                            </form></td>
-                        </tr>
-                        @endif
-                        @endforeach
-                        </tbody>
-                    </table>
+                <div class="text-center">
+                    <a href="/accueil-chauffeur" class="btn" style="background-color:#F77D0A; color:#fff">Retourner à la liste des commandes</a>
                 </div>
 
 
 
-        <!-- JavaScript Libraries -->
-        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
-        <script src="/lib/easing/easing.min.js"></script>
-        <script src="/lib/waypoints/waypoints.min.js"></script>
-        <script src="/lib/owlcarousel/owl.carousel.min.js"></script>
-        <script src="/lib/tempusdominus/js/moment.min.js"></script>
-        <script src="/lib/tempusdominus/js/moment-timezone.min.js"></script>
-        <script src="/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
+    <!-- Navbar End -->
+<!-- JavaScript Libraries -->
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+<script src="/lib/easing/easing.min.js"></script>
+<script src="/lib/waypoints/waypoints.min.js"></script>
+<script src="/lib/owlcarousel/owl.carousel.min.js"></script>
+<script src="/lib/tempusdominus/js/moment.min.js"></script>
+<script src="/lib/tempusdominus/js/moment-timezone.min.js"></script>
+<script src="/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
 
-        <!-- Template Javascript -->
-        <script src="/js/main.js"></script>
-        <script src="/js/bootstrap.min.js"></script>
-        <script src="/js/jquery.easing.min.js"></script>
-        <script src="/js/scrolling-nav.js"></script>
-        <script src="/js/validator.js"></script>
-        <script src="/js/jquery.min.js"></script>
+<!-- Template Javascript -->
+<script src="/js/main.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/jquery.easing.min.js"></script>
+<script src="/js/scrolling-nav.js"></script>
+<script src="/js/validator.js"></script>
+<script src="/js/jquery.min.js"></script>

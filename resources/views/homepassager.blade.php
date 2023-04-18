@@ -120,6 +120,15 @@
             <br>
             <p class="h3">Bienvenue <span style="color:#F77D0A;">{{ Auth::user()->prenom }} {{ Auth::user()->name }}</span></p>
             <br>
+            <a href="#listecommandes" class="btn" style="background-color:#F77D0A; color:#fff">Ma liste de commandes</a>
+            <br>
+            @if (session('success'))
+                    <div class="alert alert-success">
+                        {{ session('success') }}
+                    </div>
+                    {{ session()->forget('success') }}
+            @endif
+            <br>
             <p class="text-center h2">Voici les tajets disponibles! Choisissez en un pour passer commande</p>
                 <br>
                 <div class="">
@@ -147,6 +156,43 @@
                                 </form>
                             </td>
                         </tr>
+                        @endforeach
+                        </tbody>
+                    </table>
+                </div>
+                <br>
+                <p class="text-center h2">Liste de vos commandes</p>
+                <br>
+                <div class="" id="listecommandes">
+                    <table class="table">
+                        <thead style="background-color: #2B2E4A;">
+                        <tr style="color:#F77D0A;">
+                            <th scope="col">Depart</th>
+                            <th scope="col">Destination</th>
+                            <th scope="col">Prix</th>
+                            <th scope="col">Chauffeur</th>
+                            <th scope="col">Statut</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach($commandes as $commande)
+                        @if ($commande->chauffeur_id != null)
+                        <tr style="color: #2B2E4A;">
+                            <td>{{$commande->trajet->depart }}</td>
+                            <td>{{ $commande->trajet->destination }}</td>
+                            <td>{{ $commande->trajet->prix }}</td>
+                            <td>{{ $commande->chauffeur->name }} | {{ $commande->chauffeur->telephone }}</td>
+                            <td>Réceptionnée</td>
+                        </tr>
+                        @else
+                        <tr style="color: #2B2E4A;">
+                            <td>{{$commande->trajet->depart }}</td>
+                            <td>{{ $commande->trajet->destination }}</td>
+                            <td>{{ $commande->trajet->prix }}</td>
+                            <td>Aucun chauffeur!</td>
+                            <td>En attente</td>
+                        </tr>
+                        @endif
                         @endforeach
                         </tbody>
                     </table>

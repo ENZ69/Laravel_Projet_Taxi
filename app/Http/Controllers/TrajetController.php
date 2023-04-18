@@ -33,11 +33,6 @@ class TrajetController extends Controller
         return view('trajet', ['trajets' => Trajet::all()]);
     }
 
-    public function passagerTrajet()
-    {
-        return view('homepassager', ['trajets' => Trajet::all()]);
-    }
-
     public function update(Request $request, $id)
     {
         // Valider les données du formulaire
